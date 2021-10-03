@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useLocation, useRouter } from 'wouter';
 import styled from '@emotion/styled';
 import { useFetch } from '../hooks/useFetch';
 import CardList from '../components/CardList';
 import Filters from '../components/Filters';
 import Search from '../components/Search';
-import { jobMapper } from '../utils/helpers';
+import { jobMapper, queryParams } from '../utils/helpers';
 import { bps } from '../styles';
 
 const Nav = styled.nav`
@@ -27,7 +28,7 @@ const Aside = styled.aside`
 const Main = styled.main`
   width: calc(100% - 379px);
   padding-left: 32px;
-  
+
   ${bps.mobile} {
     width: 100%;
     padding-left: 0;
@@ -35,23 +36,44 @@ const Main = styled.main`
   }
 `;
 
+const currentLocation = () => {
+  return window.location.hash.replace(/^#/, '') || '/';
+};
+
 const HomePage = () => {
   // const { data, loading, error } = useFetch('https://remotive.io/api/remote-jobs?limit=1');
   const { data, loading, error } = useFetch('/assets/mocks/jobs.json');
-  const { jobs = [] } = data || {};
+  let { jobs = [] } = data || {};
+
+  const getJobs = useMemo(() => {
+    return jobs.map((job) => jobMapper(job));
+  }, [jobs]);
+
+  const [location, setLocation] = useLocation();
+  const { q = '', full_time: fullTime = '' } = queryParams();
+
+  const onSearch = ({ 
+    searchText, toggleFullTime }) => {
+    let searchLocation = `${location}?q=${searchText}`;
+
+    if (toggleFullTime) {
+      searchLocation += `&full_time=true`;
+    }
+    setLocation(searchLocation);
+  };
 
   return (
     <>
       <Nav className="App-nav">
-        <Search />
+        <Search query={q} onSubmit={onSearch} />
       </Nav>
 
       <Aside className="App-aside">
-        <Filters />
+        <Filters fullTime={Boolean(fullTime)} />
       </Aside>
 
       <Main className="App-main">
-        <CardList items={jobs.map((job) => jobMapper(job))} />
+        <CardList items={getJobs} />
       </Main>
     </>
   );

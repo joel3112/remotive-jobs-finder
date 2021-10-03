@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter';
+import { Redirect, Route, Switch } from 'wouter';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -14,8 +14,10 @@ const App = () => {
 
       <div className="App-body">
         <Switch>
-          <Route component={HomePage} path="/" />
+          <Route component={HomePage} path="/home" />
           <Route component={JobPage} path="/job/:id" />
+
+          <Redirect to="/home" />
         </Switch>
       </div>
 

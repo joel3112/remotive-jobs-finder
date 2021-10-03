@@ -27,6 +27,18 @@ export const jobMapper = (job) => {
   };
 };
 
+// Selectors
+
+export const getJobMimify = (job) => {
+  return Object.entries(job)
+    .map(([_, value]) => (value || '').toLowerCase())
+    .join(',');
+};
+
+export const getJobsBySearch = (jobs, query) => {
+  return jobs.filter((job) => getJobMimify(job).includes(query.toLowerCase()));
+};
+
 // Utils
 
 export const getDeviceConfig = (width) => {
@@ -60,3 +72,10 @@ export const sortArrayByKey = (array, key, descending = false) => {
 export const formattedDate = (date) => {
   return moment(new Date(date), 'YYYYMMDD HH:mm').fromNow();
 };
+
+export const queryParams = () => {
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const queryParams = Object.fromEntries(urlSearchParams.entries());
+
+  return queryParams;
+}

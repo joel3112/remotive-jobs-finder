@@ -10,6 +10,7 @@ const ButtonContainer = styled.button`
   border-radius: ${({ theme }) => `${theme.borderRadius.small}`};
   font-family: 'Roboto Medium';
   width: 146px;
+  min-width: 146px;
   height: 47px;
   border: none;
   outline: none;

@@ -45,7 +45,7 @@ const Checkbox = ({ label, name, value, onChange }) => {
         name={name} 
         type="checkbox" 
         id="checkbox"
-        value={value} 
+        checked={value} 
         onChange={onChange} />
       <label htmlFor="checkbox">{label}</label>
     </CheckboxContainer>

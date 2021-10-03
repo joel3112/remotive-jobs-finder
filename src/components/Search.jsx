@@ -36,7 +36,10 @@ const Search = ({ query = '', onSubmit }) => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit && onSubmit();
+    
+    if (onSubmit) {
+      onSubmit({ searchText });
+    }
   };
 
   return (
@@ -47,7 +50,8 @@ const Search = ({ query = '', onSubmit }) => {
           placeholder="Title, companies, expertise or benefits" 
           icon="work_outline" 
           onChange={handleInputChange} 
-          value={searchText} />
+          value={searchText}
+          width="100%" />
         <Button>Search</Button>
       </FormContainer>
     </SearchContainer>
